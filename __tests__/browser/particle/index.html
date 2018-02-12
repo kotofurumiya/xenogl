@@ -134,7 +134,7 @@
       updaterProgram.activateVertexArrayObject(updateVAOs[inputIndex]);
       tf.feedback({
         mode: XenoGL.POINTS,
-        targetBuffer: buffers[outputIndex],
+        targetBuffers: [buffers[outputIndex]],
         count: PARTICLE_NUM
       });
 
