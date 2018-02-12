@@ -234,7 +234,7 @@ program.addUniform(modelUniform);
 program.addUniform(viewUniform);
 program.addUniform(projectionUniform);
 </code></pre>
-				<p><code>XenoGL.Uniform</code> object has <code>setValue</code>, <code>setVector</code> and <code>setMatrix</code> to apply a value.</p>
+				<p><code>XenoGL.Uniform</code> object has <code>setValue(value, type)</code>, <code>setVector(vector, type)</code> and <code>setMatrix(matrix)</code> to apply a value. <code>type</code> can be XenoGL.FLOAT, XenoGL.UNSIGNED_SHORT and other data types.</p>
 				<p>Don&#39;t forget to add an uniform to the program.</p>
 				<h2 id="vertex-array-objects">Vertex Array Objects</h2>
 				<p>XenoGL supports Vertex Array Object(VAO).</p>
@@ -294,7 +294,27 @@ xgl.addTransformFeedback(tf);
 });
 </code></pre>
 				<h2 id="textures">Textures</h2>
-				<p>Not supported yet.</p>
+				<p>Using textures, create a <code>Texture2D</code> object and add it to the context.</p>
+				<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> textureSource = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'texture-300x300.png'</span>).then(<span class="hljs-function">(<span class="hljs-params">res</span>) =&gt;</span> res.blob())
+                                                        .then(<span class="hljs-function">(<span class="hljs-params">blob</span>) =&gt;</span> createImageBitmap(blob));
+<span class="hljs-keyword">const</span> texture = <span class="hljs-keyword">new</span> XenoGL.Texture2D(textureSource);
+xgl.addTexture(texture);
+</code></pre>
+				<p>Source of texture can be img, canvas, video, ImageBitmap, ImageData or ArrayBufferView.</p>
+				<p>You can crete textures with options.</p>
+				<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> texture = <span class="hljs-keyword">new</span> XenoGL.Texture2D(textureSource, {
+    <span class="hljs-attr">target</span>: XenoGL.TEXTURE_2D,
+    <span class="hljs-attr">mipmapLevel</span>: <span class="hljs-number">0</span>,
+    internalFormat?: XenoGL.RGBA,
+    <span class="hljs-attr">format</span>: XenoGL.RGBA,
+    <span class="hljs-attr">dataType</span>: XenoGL.UNSIGNED_BYTE,
+    <span class="hljs-attr">width</span>: <span class="hljs-number">500</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">500</span>
+});
+</code></pre>
+				<p>To use another texture, use <code>xgl.activateTexture(texture)</code>.</p>
+				<pre><code class="lang-javascript">xgl.activateTexture(texture2);
+</code></pre>
 				<h2 id="misc-">Misc.</h2>
 				<pre><code class="lang-javascript">xgl.clearColor(<span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">1.0</span>);
 xgl.clear(XenoGL.COLOR_BUFFER_BIT | XenoGL.DEPTH_BUFFER_BIT);
@@ -322,6 +342,9 @@ xgl.disable(XenoGL.RASTERIZER_DISCARD);
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_shader_program_.html">"shader_<wbr>program"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_texture_.html">"texture"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_transform_feedback_.html">"transform_<wbr>feedback"</a>

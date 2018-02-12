@@ -318,7 +318,37 @@ tf.feedback({
 
 ## Textures
 
-Not supported yet.
+Using textures, create a `Texture2D` object and add it to the context.
+
+```javascript
+const textureSource = await fetch('texture-300x300.png').then((res) => res.blob())
+                                                        .then((blob) => createImageBitmap(blob));
+const texture = new XenoGL.Texture2D(textureSource);
+xgl.addTexture(texture);
+```
+
+Source of texture can be img, canvas, video, ImageBitmap, ImageData or ArrayBufferView.
+
+You can crete textures with options.
+
+```javascript
+const texture = new XenoGL.Texture2D(textureSource, {
+    target: XenoGL.TEXTURE_2D,
+    mipmapLevel: 0,
+    internalFormat?: XenoGL.RGBA,
+    format: XenoGL.RGBA,
+    dataType: XenoGL.UNSIGNED_BYTE,
+    width: 500,
+    height: 500
+});
+```
+
+To use another texture, use `xgl.activateTexture(texture)`.
+
+```javascript
+xgl.activateTexture(texture2);
+```
+
 
 ## Misc.
 

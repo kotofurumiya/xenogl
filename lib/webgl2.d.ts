@@ -1,11 +1,14 @@
 /// <reference types="webgl2" />
 import { Program } from './shader_program';
 import { TransformFeedback } from './transform_feedback';
+import { Texture } from './texture';
 export declare class WebGL2 {
     protected _context: WebGL2RenderingContext;
     protected _programs: Array<Program | null>;
     protected _activeProgram: Program | null;
     protected _transformFeedbacks: Array<TransformFeedback | null>;
+    protected _textures: Texture[];
+    protected _activeTexture: Texture | null;
     constructor(canvas: HTMLCanvasElement);
     /**
      * Adds the program to the `WebGL2` and returns ID number of the program.
@@ -19,6 +22,7 @@ export declare class WebGL2 {
      * @param {TransformFeedback} tf
      */
     addTransformFeedback(tf: TransformFeedback): void;
+    addTexture(texture: Texture): void;
     /**
      * Activates a program and deactivates the previous program.
      * Throws an error when the program is not attached to WebGL2.
@@ -41,6 +45,7 @@ export declare class WebGL2 {
      * @param {number} id
      */
     useProgramByID(id: number): void;
+    activateTexture(texture: Texture): void;
     /**
      * Deactivates the program.
      * @param {Program} program

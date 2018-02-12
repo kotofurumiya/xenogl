@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;webgl2&quot; | xenogl</title>
+	<title>TextureBase | xenogl</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,27 +56,122 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_webgl2_.html">&quot;webgl2&quot;</a>
+					<a href="../modules/_texture_.html">&quot;texture&quot;</a>
+				</li>
+				<li>
+					<a href="_texture_.texturebase.html">TextureBase</a>
 				</li>
 			</ul>
-			<h1>External module &quot;webgl2&quot;</h1>
+			<h1>Class TextureBase</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">TextureBase</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="_texture_.texture2d.html" class="tsd-signature-type">Texture2D</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implements</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../interfaces/_texture_.texture.html" class="tsd-signature-type">Texture</a></li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_webgl2_.webgl2.html" class="tsd-kind-icon">WebGL2</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_texture_.texturebase.html#_gettextureidfromnumber" class="tsd-kind-icon">_get<wbr>Texture<wbr>IdFrom<wbr>Number</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_texture_.texturebase.html#_init" class="tsd-kind-icon">_init</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_texture_.texturebase.html#activate" class="tsd-kind-icon">activate</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<a name="_gettextureidfromnumber" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _get<wbr>Texture<wbr>IdFrom<wbr>Number</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">_get<wbr>Texture<wbr>IdFrom<wbr>Number<span class="tsd-signature-symbol">(</span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in texture.ts:14</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>n: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="_init" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> _init</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">_init<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">WebGL2RenderingContext</span>, textureNumber<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_texture_.texture.html">Texture</a>.<a href="../interfaces/_texture_.texture.html#_init">_init</a></p>
+								<ul>
+									<li>Defined in texture.ts:12</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>context: <span class="tsd-signature-type">WebGL2RenderingContext</span></h5>
+								</li>
+								<li>
+									<h5>textureNumber: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="activate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> activate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">activate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_texture_.texture.html">Texture</a>.<a href="../interfaces/_texture_.texture.html#activate">activate</a></p>
+								<ul>
+									<li>Defined in texture.ts:11</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -87,44 +182,68 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_buffer_.html">"buffer"</a>
+						<a href="../modules/_buffer_.html">"buffer"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_constants_.html">"constants"</a>
+						<a href="../modules/_constants_.html">"constants"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_index_.html">"index"</a>
+						<a href="../modules/_index_.html">"index"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_shader_program_.html">"shader_<wbr>program"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_texture_.html">"texture"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_transform_feedback_.html">"transform_<wbr>feedback"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_uniform_buffer_object_.html">"uniform_<wbr>buffer_<wbr>object"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_utils_.html">"utils"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_variable_.html">"variable"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_vertex_array_object_.html">"vertex_<wbr>array_<wbr>object"</a>
+						<a href="../modules/_shader_program_.html">"shader_<wbr>program"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="_webgl2_.html">"webgl2"</a>
+						<a href="../modules/_texture_.html">"texture"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_transform_feedback_.html">"transform_<wbr>feedback"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_uniform_buffer_object_.html">"uniform_<wbr>buffer_<wbr>object"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_utils_.html">"utils"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_variable_.html">"variable"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_vertex_array_object_.html">"vertex_<wbr>array_<wbr>object"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_webgl2_.html">"webgl2"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_webgl2_.webgl2.html" class="tsd-kind-icon">WebGL2</a>
+						<a href="_texture_.texture2d.html" class="tsd-kind-icon">Texture2D</a>
+					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_texture_.texturebase.html" class="tsd-kind-icon">Texture<wbr>Base</a>
+						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="_texture_.texturebase.html#_gettextureidfromnumber" class="tsd-kind-icon">_get<wbr>Texture<wbr>IdFrom<wbr>Number</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_texture_.texturebase.html#_init" class="tsd-kind-icon">_init</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_texture_.texturebase.html#activate" class="tsd-kind-icon">activate</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_texture_.texture.html" class="tsd-kind-icon">Texture</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/_texture_.html#texturesource" class="tsd-kind-icon">Texture<wbr>Source</a>
 					</li>
 				</ul>
 			</nav>

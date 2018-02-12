@@ -6,3 +6,4 @@ export * from './buffer';
 export * from './vertex_array_object';
 export * from './uniform_buffer_object';
 export * from './transform_feedback';
+export * from './texture';

@@ -1,18 +1,23 @@
 import { Program } from './shader_program';
 import { COLOR_BUFFER_BIT } from './constants';
 import { TransformFeedback } from './transform_feedback';
+import { Texture } from './texture';
 
 export class WebGL2 {
   protected _context: WebGL2RenderingContext;
   protected _programs: Array<Program | null>;
   protected _activeProgram: Program | null;
   protected _transformFeedbacks: Array<TransformFeedback | null>;
+  protected _textures: Texture[];
+  protected _activeTexture: Texture | null;
 
   constructor(canvas: HTMLCanvasElement) {
     this._context = <WebGL2RenderingContext>canvas.getContext('webgl2');
     this._programs = [];
     this._activeProgram = null;
     this._transformFeedbacks = [];
+    this._textures = [];
+    this._activeTexture = null;
   }
 
   /**
@@ -46,6 +51,16 @@ export class WebGL2 {
   addTransformFeedback(tf: TransformFeedback) {
     this._transformFeedbacks.push(tf);
     tf._init(this._context);
+  }
+
+  addTexture(texture: Texture) {
+    const id = this._textures.length;
+    this._textures.push(texture);
+    texture._init(this._context, id);
+
+    if(this._activeTexture === null) {
+      texture.activate();
+    }
   }
 
   /**
@@ -107,6 +122,10 @@ export class WebGL2 {
     this._context.useProgram(program.glProgram);
 
     this._activeProgram = program;
+  }
+
+  activateTexture(texture: Texture) {
+
   }
 
   /**
