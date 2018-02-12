@@ -234,7 +234,7 @@ program.addUniform(viewUniform);
 program.addUniform(projectionUniform);
 ```
 
-`XenoGL.Uniform` object has `setValue`, `setVector` and `setMatrix` to apply a value.
+`XenoGL.Uniform` object has `setValue(value, type)`, `setVector(vector, type)` and `setMatrix(matrix)` to apply a value. `type` can be XenoGL.FLOAT, XenoGL.UNSIGNED_SHORT and other data types.
 
 Don't forget to add an uniform to the program.
 
