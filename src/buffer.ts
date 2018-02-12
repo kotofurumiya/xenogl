@@ -64,22 +64,9 @@ export abstract class BufferBase implements Buffer {
 
     this._totalAttributesSize = this._attributes.reduce((prev, attr) => prev + attr.size, 0);
 
-    if(this._dataOrLength === null) {
-      this._data = null;
-    } else if(typeof this._dataOrLength === 'number') {
-      this._data = null;
-      this._flushData = (context: WebGL2RenderingContext, buffer: WebGLBuffer) => {
-        context.bindBuffer(this._bufferType, buffer);
-        context.bufferData(this._bufferType, <number>this._dataOrLength, this._usage);
-        context.bindBuffer(this._bufferType, null);
-      }
-    } else {
-      this._data = this._dataOrLength;
-      this._flushData = (context: WebGL2RenderingContext, buffer: WebGLBuffer) => {
-        context.bindBuffer(this._bufferType, buffer);
-        context.bufferData(this._bufferType, <TypedArrayLike>this._dataOrLength, this._usage);
-        context.bindBuffer(this._bufferType, null);
-      }
+    this._data = null;
+    if(this._dataOrLength !== null) {
+      this.bufferData(this._dataOrLength);
     }
   }
 
@@ -93,7 +80,8 @@ export abstract class BufferBase implements Buffer {
       context.bindBuffer(this._bufferType, buffer);
 
       if(typeof dataOrLength === 'number') {
-        context.bufferData(this._bufferType, dataOrLength, this._usage);
+        const bytes = dataOrLength * <number>getBytesPerElementByGlType(this._dataType);
+        context.bufferData(this._bufferType, bytes, this._usage);
       } else {
         context.bufferData(this._bufferType, dataOrLength, this._usage);
         this._data = dataOrLength;
@@ -168,7 +156,7 @@ export abstract class BufferBase implements Buffer {
 
       context.bindBuffer(this.bufferType, this._glBuffer);
       this._initAttributes(context, program, this._enabledAttributes);
-      context.bindBuffer(this.bufferType, null);
+      context.bindBuffer(this.bufferType, null)
     }
   }
 

@@ -23,8 +23,8 @@
     const program = new XenoGL.Program({
       vertexShader: vShader,
       fragmentShader: fShader,
-      feedbackVaryings: ['result'],
-      feedbackBufferMode: XenoGL.INTERLEAVED_ATTRIBS
+      feedbackVaryings: ['result1', 'result2'],
+      feedbackBufferMode: XenoGL.SEPARATE_ATTRIBS
     });
 
     xgl.addProgram(program);
@@ -35,13 +35,19 @@
       attributes: [new XenoGL.Attribute('vecA', 4), new XenoGL.Attribute('vecB', 4)]
     });
 
-    const tfBuffer = new XenoGL.ArrayBuffer({
-      dataOrLength: 8 * 4,
+    const tfBufferA = new XenoGL.ArrayBuffer({
+      dataOrLength: 4,
+      dataType: XenoGL.FLOAT
+    });
+
+    const tfBufferB = new XenoGL.ArrayBuffer({
+      dataOrLength: 4,
       dataType: XenoGL.FLOAT
     });
 
     program.addBuffer(vecBuffer);
-    program.addBuffer(tfBuffer);
+    program.addBuffer(tfBufferA);
+    program.addBuffer(tfBufferB);
 
     const transformFeedback = new XenoGL.TransformFeedback();
     xgl.addTransformFeedback(transformFeedback);
@@ -51,20 +57,27 @@
 
     transformFeedback.feedback({
       mode: XenoGL.POINTS,
-      targetBuffer: tfBuffer,
+      targetBuffers: [tfBufferA, tfBufferB],
       count: 1
     });
 
     xgl.disable(XenoGL.RASTERIZER_DISCARD);
 
-    const result = new Float32Array(4);
-    const offset = 0;
-    xgl._context.bindBufferBase(XenoGL.TRANSFORM_FEEDBACK_BUFFER, 0,  tfBuffer.glBuffer);
-    xgl._context.getBufferSubData(XenoGL.TRANSFORM_FEEDBACK_BUFFER, offset, result);
+    const resultA = new Float32Array(4);
+    xgl._context.bindBufferBase(XenoGL.TRANSFORM_FEEDBACK_BUFFER, 0,  tfBufferA.glBuffer);
+    xgl._context.getBufferSubData(XenoGL.TRANSFORM_FEEDBACK_BUFFER, 0, resultA);
 
-    const div = document.createElement('div');
-    div.innerText = result.toString();
-    document.body.appendChild(div);
+    const divA = document.createElement('div');
+    divA.innerText = resultA.toString();
+    document.body.appendChild(divA);
+
+    const resultB = new Float32Array(4);
+    xgl._context.bindBufferBase(XenoGL.TRANSFORM_FEEDBACK_BUFFER, 0,  tfBufferB.glBuffer);
+    xgl._context.getBufferSubData(XenoGL.TRANSFORM_FEEDBACK_BUFFER, 0, resultB);
+
+    const divB = document.createElement('div');
+    divB.innerText = resultB.toString();
+    document.body.appendChild(divB);
   })();
 </script>
 </body>

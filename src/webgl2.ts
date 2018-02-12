@@ -45,8 +45,7 @@ export class WebGL2 {
    */
   addTransformFeedback(tf: TransformFeedback) {
     this._transformFeedbacks.push(tf);
-    const index = this._transformFeedbacks.length - 1;
-    tf._init(this._context, index);
+    tf._init(this._context);
   }
 
   /**

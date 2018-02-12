@@ -311,7 +311,7 @@ xgl.addTransformFeedback(tf);
 ```javascript
 tf.feedback({
   mode: XenoGL.POINTS,
-  targetBuffer: buffer, // a buffer to feedback.
+  targetBuffers: [buffer], // buffers to feedback.
   count: 100 // how many calc.
 });
 ```
