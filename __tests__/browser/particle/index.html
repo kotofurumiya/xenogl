@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>XenoGL Test - Particle</title>
+  <script src="../../../build/xenogl.min.js"></script>
+</head>
+<body>
+
+<script>
+  'use strict';
+
+  (async function main() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 500;
+    canvas.height = 500;
+    document.body.appendChild(canvas);
+
+    const xgl = new XenoGL.WebGL2(canvas);
+    const gl = xgl._context;
+
+    const PARTICLE_NUM = 1000;
+    const MAX_SPEED = 0.001;
+    const MAX_LIFE = 1000.0;
+    const originPoint = new Float32Array([0.0, 0.0]);
+
+    canvas.addEventListener('mousemove', (mEvent) => {
+      originPoint[0] = -1.0 + (mEvent.clientX / canvas.width) * 2;
+      originPoint[1] = 1.0 - (mEvent.clientY / canvas.height) * 2;
+    });
+
+    const updaterVsSource = await fetch('particle_updater_vs.glsl').then((res) => res.text());
+    const updaterFsSource = await fetch('particle_updater_fs.glsl').then((res) => res.text());
+    const rendererVsSource = await fetch('particle_renderer_vs.glsl').then((res) => res.text());
+    const rendererFsSource = await fetch('particle_renderer_fs.glsl').then((res) => res.text());
+
+    const updaterVs = new XenoGL.VertexShader(updaterVsSource);
+    const updaterFs = new XenoGL.FragmentShader(updaterFsSource);
+    const updaterProgram = new XenoGL.Program({
+      vertexShader: updaterVs,
+      fragmentShader: updaterFs,
+      feedbackVaryings: ['vertexPosition', 'vertexVelocity', 'vertexAge', 'vertexLife'],
+      feedbackBufferMode: XenoGL.INTERLEAVED_ATTRIBS
+    });
+
+    const originUniform = new XenoGL.Uniform('origin');
+    const elapsedUniform = new XenoGL.Uniform('elapsedTimeDelta');
+
+    updaterProgram.addUniform(originUniform);
+    updaterProgram.addUniform(elapsedUniform);
+
+    const rendererVs = new XenoGL.VertexShader(rendererVsSource);
+    const rendererFs = new XenoGL.FragmentShader(rendererFsSource);
+    const rendererProgram = new XenoGL.Program({
+      vertexShader: rendererVs,
+      fragmentShader: rendererFs
+    });
+
+    xgl.addProgram(updaterProgram);
+    xgl.addProgram(rendererProgram);
+
+    xgl.clearColor(0.0, 0.0, 0.0, 1.0);
+
+    const particleInitialData = [];
+    for(let i = 0; i < PARTICLE_NUM; i++) {
+      particleInitialData.push(originPoint[0]);
+      particleInitialData.push(originPoint[1]);
+
+      const vx = -MAX_SPEED + (Math.random() * (MAX_SPEED * 2));
+      const vy = -MAX_SPEED + (Math.random() * (MAX_SPEED * 2));
+      particleInitialData.push(vx);
+      particleInitialData.push(vy);
+
+      particleInitialData.push(0.0);
+
+      const life = Math.random() * MAX_LIFE;
+      particleInitialData.push(life);
+    }
+
+    const particleInitialDataF32 = new Float32Array(particleInitialData);
+
+    const positionAttr = new XenoGL.Attribute('particlePosition', 2);
+    const velocityAttr = new XenoGL.Attribute('particleVelocity', 2);
+    const ageAttr = new XenoGL.Attribute('particleAge', 1);
+    const lifeAttr = new XenoGL.Attribute('particleLife', 1);
+
+    const inputBuffer = new XenoGL.ArrayBuffer({
+      dataOrLength: particleInitialDataF32,
+      attributes: [positionAttr, velocityAttr, ageAttr, lifeAttr],
+      dataType: XenoGL.FLOAT,
+      usage: XenoGL.DYNAMIC_COPY
+    });
+
+    const outputBuffer = new XenoGL.ArrayBuffer({
+      dataOrLength: particleInitialDataF32,
+      attributes: [positionAttr, velocityAttr, ageAttr, lifeAttr],
+      dataType: XenoGL.FLOAT,
+      usage: XenoGL.DYNAMIC_COPY
+    });
+
+    const inputBufferUpdateVAO = new XenoGL.VertexArrayObject(inputBuffer, { dataOrLength: particleInitialDataF32 });
+    const outputBufferUpdateVAO = new XenoGL.VertexArrayObject(outputBuffer, { dataOrLength: particleInitialDataF32 });
+
+    const inputBufferRenderVAO = new XenoGL.VertexArrayObject(inputBuffer, { attributes: [positionAttr] });
+    const outputBufferRenderVAO = new XenoGL.VertexArrayObject(outputBuffer, { attributes: [positionAttr] });
+
+    updaterProgram.addVertexArrayObject(inputBufferUpdateVAO);
+    updaterProgram.addVertexArrayObject(outputBufferUpdateVAO);
+    rendererProgram.addVertexArrayObject(inputBufferRenderVAO);
+    rendererProgram.addVertexArrayObject(outputBufferRenderVAO);
+
+    const tf = new XenoGL.TransformFeedback();
+    xgl.addTransformFeedback(tf);
+
+    const buffers = [inputBuffer, outputBuffer];
+    const updateVAOs = [inputBufferUpdateVAO, outputBufferUpdateVAO];
+    const renderVAOs = [inputBufferRenderVAO, outputBufferRenderVAO];
+    let inputIndex = 0;
+    let outputIndex = 1;
+
+    let prevTimeMs = performance.now();
+    function loop(timestampMs) {
+      const elapsedTime = timestampMs - prevTimeMs;
+
+      xgl.clear(XenoGL.COLOR_BUFFER_BIT);
+
+      xgl.useProgram(updaterProgram);
+
+      originUniform.setVector(originPoint, XenoGL.FLOAT);
+      elapsedUniform.setValue(elapsedTime, XenoGL.FLOAT);
+
+      xgl.enable(XenoGL.RASTERIZER_DISCARD);
+
+      updaterProgram.activateVertexArrayObject(updateVAOs[inputIndex]);
+      tf.feedback({
+        mode: XenoGL.POINTS,
+        targetBuffer: buffers[outputIndex],
+        count: PARTICLE_NUM
+      });
+
+      xgl.disable(XenoGL.RASTERIZER_DISCARD);
+
+      xgl.useProgram(rendererProgram);
+      rendererProgram.activateVertexArrayObject(renderVAOs[outputIndex]);
+      xgl.draw(XenoGL.POINTS, PARTICLE_NUM);
+
+      [inputIndex, outputIndex] = [outputIndex, inputIndex];
+
+      prevTimeMs = timestampMs;
+      requestAnimationFrame((ts) => loop(ts));
+    }
+
+    // ループ開始
+    requestAnimationFrame((ts) => loop(ts));
+  })();
+</script>
+</body>
+</html>

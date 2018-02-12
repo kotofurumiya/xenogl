@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>XenoGL Test - UBO</title>
+  <script src="../../../build/xenogl.min.js"></script>
+</head>
+<body>
+<div>It's ok if you see a red square.</div>
+<script>
+  'use strict';
+
+  (async function main() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 500;
+    canvas.height = 500;
+    document.body.appendChild(canvas);
+
+    const xgl = new XenoGL.WebGL2(canvas);
+
+    const vsSource = await fetch('vs.glsl').then((res) => res.text());
+    const fsSource = await fetch('fs.glsl').then((res) => res.text());
+
+    const vShader1 = new XenoGL.VertexShader(vsSource);
+    const fShader1 = new XenoGL.FragmentShader(fsSource);
+
+    const vShader2 = new XenoGL.VertexShader(vsSource);
+    const fShader2 = new XenoGL.FragmentShader(fsSource);
+
+    const program1 = new XenoGL.Program({
+      vertexShader: vShader1,
+      fragmentShader: fShader1
+    });
+
+    const program2 = new XenoGL.Program({
+      vertexShader: vShader2,
+      fragmentShader: fShader2
+    });
+
+    xgl.addProgram(program1);
+    xgl.addProgram(program2);
+
+    const vertices1 = new Float32Array([
+      -0.5, 0.5,  0.0,
+      -0.5, -0.5, 0.0,
+      0.5,  0.5,  0.0
+    ]);
+
+    const vertices2 = new Float32Array([
+      -0.5, -0.5, 0.0,
+      0.5,  -0.5, 0.0,
+      0.5,  0.5,  0.0
+    ]);
+
+    const positionAttribute = new XenoGL.Attribute('vertexPosition', 3);
+
+    const positionBuffer1 = new XenoGL.ArrayBuffer({
+      attributes: [positionAttribute],
+      dataType: XenoGL.FLOAT
+    });
+
+    const positionBuffer2 = new XenoGL.ArrayBuffer({
+      attributes: [positionAttribute],
+      dataType: XenoGL.FLOAT
+    });
+
+    program1.addBuffer(positionBuffer1);
+    program2.addBuffer(positionBuffer2);
+
+    const sharedUniformBuffer = new XenoGL.UniformBuffer({
+      dataOrLength: new Float32Array([1.0, 0.0, 0.0, 1.0]),
+      dataType: XenoGL.FLOAT
+    });
+
+    const ubo1 = new XenoGL.UniformBufferObject('param', sharedUniformBuffer);
+    const ubo2 = new XenoGL.UniformBufferObject('param', sharedUniformBuffer);
+
+    program1.addUniformBufferObject(ubo1);
+    program2.addUniformBufferObject(ubo2);
+
+    xgl.activateProgram(program1);
+    positionBuffer1.bufferData(vertices1);
+    xgl.draw(XenoGL.TRIANGLES);
+
+    xgl.activateProgram(program2);
+    positionBuffer2.bufferData(vertices2);
+    xgl.draw(XenoGL.TRIANGLES);
+  })();
+</script>
+</body>
+</html>

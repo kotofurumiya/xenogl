@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>XenoGL Test - Basic</title>
+  <script src="../../../build/xenogl.min.js"></script>
+</head>
+<body>
+
+  <script>
+    'use strict';
+
+    (async function main() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 500;
+      canvas.height = 500;
+      document.body.appendChild(canvas);
+
+      const xgl = new XenoGL.WebGL2(canvas);
+
+      const vsSource = await fetch('vs.glsl').then((res) => res.text());
+      const fsSource = await fetch('fs.glsl').then((res) => res.text());
+
+      const vShader = new XenoGL.VertexShader(vsSource);
+      const fShader = new XenoGL.FragmentShader(fsSource);
+
+      const program = new XenoGL.Program({
+        vertexShader: vShader,
+        fragmentShader: fShader
+      });
+
+      xgl.addProgram(program);
+
+      const vertices = new Float32Array([
+        -0.5, 0.5,  0.0,
+        -0.5, -0.5, 0.0,
+        0.5,  0.5,  0.0,
+        -0.5, -0.5, 0.0,
+        0.5,  -0.5, 0.0,
+        0.5,  0.5,  0.0
+      ]);
+
+      const colors = new Float32Array([
+        1.0, 0.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0,
+        0.0, 0.0, 1.0, 1.0,
+        0.0, 1.0, 0.0, 1.0,
+        0.0, 0.0, 0.0, 1.0,
+        0.0, 0.0, 1.0, 1.0
+      ]);
+
+      const positionAttribute = new XenoGL.Attribute('vertexPosition', 3);
+      const colorAttribute = new XenoGL.Attribute('color', 4);
+
+      const positionBuffer = new XenoGL.ArrayBuffer({
+        dataOrLength: vertices,
+        attributes: [positionAttribute],
+        dataType: XenoGL.FLOAT
+      });
+
+      const colorBuffer = new XenoGL.ArrayBuffer({
+        dataOrLength: colors,
+        attributes: [colorAttribute],
+        dataType: XenoGL.FLOAT
+      });
+
+      program.addBuffer(positionBuffer);
+      program.addBuffer(colorBuffer);
+
+      xgl.draw(XenoGL.TRIANGLES);
+    })();
+  </script>
+</body>
+</html>

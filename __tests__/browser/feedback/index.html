@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>XenoGL Test - Feedback</title>
+  <script src="../../../build/xenogl.min.js"></script>
+</head>
+<body>
+
+<script>
+  'use strict';
+
+  (async function main() {
+    const canvas = document.createElement('canvas');
+
+    const xgl = new XenoGL.WebGL2(canvas);
+
+    const vsSource = await fetch('vs.glsl').then((res) => res.text());
+    const fsSource = await fetch('fs.glsl').then((res) => res.text());
+
+    const vShader = new XenoGL.VertexShader(vsSource);
+    const fShader = new XenoGL.FragmentShader(fsSource);
+    const program = new XenoGL.Program({
+      vertexShader: vShader,
+      fragmentShader: fShader,
+      feedbackVaryings: ['result'],
+      feedbackBufferMode: XenoGL.INTERLEAVED_ATTRIBS
+    });
+
+    xgl.addProgram(program);
+
+    const vecBuffer = new XenoGL.ArrayBuffer({
+      dataOrLength: new Float32Array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
+      dataType: XenoGL.FLOAT,
+      attributes: [new XenoGL.Attribute('vecA', 4), new XenoGL.Attribute('vecB', 4)]
+    });
+
+    const tfBuffer = new XenoGL.ArrayBuffer({
+      dataOrLength: 8 * 4,
+      dataType: XenoGL.FLOAT
+    });
+
+    program.addBuffer(vecBuffer);
+    program.addBuffer(tfBuffer);
+
+    const transformFeedback = new XenoGL.TransformFeedback();
+    xgl.addTransformFeedback(transformFeedback);
+
+    // 一時的にラスタライザを無効化しておく
+    xgl.enable(XenoGL.RASTERIZER_DISCARD);
+
+    transformFeedback.feedback({
+      mode: XenoGL.POINTS,
+      targetBuffer: tfBuffer,
+      count: 1
+    });
+
+    xgl.disable(XenoGL.RASTERIZER_DISCARD);
+
+    const result = new Float32Array(4);
+    const offset = 0;
+    xgl._context.bindBufferBase(XenoGL.TRANSFORM_FEEDBACK_BUFFER, 0,  tfBuffer.glBuffer);
+    xgl._context.getBufferSubData(XenoGL.TRANSFORM_FEEDBACK_BUFFER, offset, result);
+
+    const div = document.createElement('div');
+    div.innerText = result.toString();
+    document.body.appendChild(div);
+  })();
+</script>
+</body>
+</html>
