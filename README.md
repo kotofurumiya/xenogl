@@ -335,7 +335,7 @@ You can crete textures with options.
 const texture = new XenoGL.Texture2D(textureSource, {
     target: XenoGL.TEXTURE_2D,
     mipmapLevel: 0,
-    internalFormat?: XenoGL.RGBA,
+    internalFormat: XenoGL.RGBA,
     format: XenoGL.RGBA,
     dataType: XenoGL.UNSIGNED_BYTE,
     width: 500,
