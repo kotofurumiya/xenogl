@@ -157,4 +157,8 @@ export class WebGL2 {
   disable(cap: number): void {
     this._context.disable(cap);
   }
+
+  viewport(x: number, y: number, width: number, height: number): void {
+    this._context.viewport(x, y, width, height);
+  }
 }
