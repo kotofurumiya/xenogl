@@ -56,4 +56,5 @@ export declare class WebGL2 {
     clearColor(r: number, g: number, b: number, a: number): void;
     enable(cap: number): void;
     disable(cap: number): void;
+    viewport(x: number, y: number, width: number, height: number): void;
 }
